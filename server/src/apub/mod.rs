@@ -35,12 +35,11 @@ use anyhow::{anyhow, Context};
 use chrono::NaiveDateTime;
 use lemmy_db::{activity::do_insert_activity, user::User_};
 use lemmy_utils::{
-  convert_datetime,
-  get_apub_protocol_string,
+  apub::get_apub_protocol_string,
   location_info,
   settings::Settings,
+  utils::{convert_datetime, MentionData},
   LemmyError,
-  MentionData,
 };
 use log::debug;
 use reqwest::Client;

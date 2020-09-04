@@ -36,7 +36,7 @@ use crate::{
 use actix::Addr;
 use anyhow::anyhow;
 use background_jobs::QueueHandle;
-use lemmy_utils::{get_apub_protocol_string, settings::Settings, LemmyError};
+use lemmy_utils::{apub::get_apub_protocol_string, settings::Settings, LemmyError};
 use log::error;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use reqwest::Client;

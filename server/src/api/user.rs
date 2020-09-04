@@ -1,5 +1,5 @@
 use crate::{
-  api::{check_slurs, claims::Claims, get_user_from_jwt, get_user_from_jwt_opt, is_admin, Perform},
+  api::{claims::Claims, get_user_from_jwt, get_user_from_jwt_opt, is_admin, Perform},
   apub::ApubObjectType,
   blocking,
   captcha_espeak_wav_base64,
@@ -41,19 +41,20 @@ use lemmy_db::{
   SortType,
 };
 use lemmy_utils::{
-  generate_actor_keypair,
-  generate_random_string,
-  is_valid_preferred_username,
-  is_valid_username,
+  apub::{generate_actor_keypair, make_apub_endpoint, EndpointType},
+  email::send_email,
   location_info,
-  make_apub_endpoint,
-  naive_from_unix,
-  remove_slurs,
-  send_email,
   settings::Settings,
+  utils::{
+    check_slurs,
+    generate_random_string,
+    is_valid_preferred_username,
+    is_valid_username,
+    naive_from_unix,
+    remove_slurs,
+  },
   APIError,
   ConnectionId,
-  EndpointType,
   LemmyError,
 };
 use log::error;

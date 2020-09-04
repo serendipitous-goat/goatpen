@@ -33,7 +33,7 @@ use lemmy_db::{
   user::User_,
   Crud,
 };
-use lemmy_utils::{convert_datetime, location_info, LemmyError};
+use lemmy_utils::{location_info, utils::convert_datetime, LemmyError};
 use url::Url;
 
 #[async_trait::async_trait(?Send)]

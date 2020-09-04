@@ -13,7 +13,7 @@ use lemmy_db::{
   ListingType,
   SortType,
 };
-use lemmy_utils::{markdown_to_html, settings::Settings, LemmyError};
+use lemmy_utils::{settings::Settings, utils::markdown_to_html, LemmyError};
 use rss::{CategoryBuilder, ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 use serde::Deserialize;
 use std::str::FromStr;

@@ -49,12 +49,9 @@ use lemmy_db::{
   Crud,
 };
 use lemmy_utils::{
-  convert_datetime,
   location_info,
-  remove_slurs,
-  scrape_text_for_mentions,
+  utils::{convert_datetime, remove_slurs, scrape_text_for_mentions, MentionData},
   LemmyError,
-  MentionData,
 };
 use log::debug;
 use serde::Deserialize;

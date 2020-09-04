@@ -31,7 +31,7 @@ use lemmy_db::{
   Joinable,
   SearchType,
 };
-use lemmy_utils::{get_apub_protocol_string, location_info, LemmyError};
+use lemmy_utils::{apub::get_apub_protocol_string, location_info, LemmyError};
 use log::debug;
 use reqwest::Client;
 use serde::Deserialize;

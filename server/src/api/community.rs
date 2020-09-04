@@ -1,13 +1,5 @@
 use crate::{
-  api::{
-    check_slurs,
-    check_slurs_opt,
-    get_user_from_jwt,
-    get_user_from_jwt_opt,
-    is_admin,
-    is_mod_or_admin,
-    Perform,
-  },
+  api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, is_mod_or_admin, Perform},
   apub::ActorType,
   blocking,
   websocket::{
@@ -37,14 +29,11 @@ use lemmy_db::{
   SortType,
 };
 use lemmy_utils::{
-  generate_actor_keypair,
-  is_valid_community_name,
+  apub::{generate_actor_keypair, make_apub_endpoint, EndpointType},
   location_info,
-  make_apub_endpoint,
-  naive_from_unix,
+  utils::{check_slurs, check_slurs_opt, is_valid_community_name, naive_from_unix},
   APIError,
   ConnectionId,
-  EndpointType,
   LemmyError,
 };
 use std::str::FromStr;

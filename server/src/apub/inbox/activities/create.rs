@@ -27,7 +27,7 @@ use lemmy_db::{
   post::{Post, PostForm},
   post_view::PostView,
 };
-use lemmy_utils::{location_info, scrape_text_for_mentions, LemmyError};
+use lemmy_utils::{location_info, utils::scrape_text_for_mentions, LemmyError};
 
 pub async fn receive_create(
   activity: AnyBase,

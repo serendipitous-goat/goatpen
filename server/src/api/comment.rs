@@ -33,16 +33,13 @@ use lemmy_db::{
   SortType,
 };
 use lemmy_utils::{
-  make_apub_endpoint,
-  remove_slurs,
-  scrape_text_for_mentions,
-  send_email,
+  apub::{make_apub_endpoint, EndpointType},
+  email::send_email,
   settings::Settings,
+  utils::{remove_slurs, scrape_text_for_mentions, MentionData},
   APIError,
   ConnectionId,
-  EndpointType,
   LemmyError,
-  MentionData,
 };
 use log::error;
 use std::str::FromStr;
