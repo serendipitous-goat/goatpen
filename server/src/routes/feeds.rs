@@ -1,8 +1,9 @@
-use crate::{api::claims::Claims, blocking, LemmyContext};
+use crate::{api::claims::Claims, LemmyContext};
 use actix_web::{error::ErrorBadRequest, *};
 use anyhow::anyhow;
 use chrono::{DateTime, NaiveDateTime, Utc};
 use diesel::PgConnection;
+use lemmy_api_structs::blocking;
 use lemmy_db::{
   comment_view::{ReplyQueryBuilder, ReplyView},
   community::Community,

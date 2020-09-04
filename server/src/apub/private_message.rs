@@ -12,7 +12,6 @@ use crate::{
     FromApub,
     ToApub,
   },
-  blocking,
   DbPool,
   LemmyContext,
 };
@@ -28,6 +27,7 @@ use activitystreams::{
   prelude::*,
 };
 use anyhow::Context;
+use lemmy_api_structs::blocking;
 use lemmy_db::{
   private_message::{PrivateMessage, PrivateMessageForm},
   user::User_,

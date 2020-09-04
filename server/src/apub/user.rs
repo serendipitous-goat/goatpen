@@ -11,7 +11,6 @@ use crate::{
     PersonExt,
     ToApub,
   },
-  blocking,
   DbPool,
   LemmyContext,
 };
@@ -28,6 +27,7 @@ use activitystreams::{
 use activitystreams_ext::Ext1;
 use actix_web::{body::Body, web, HttpResponse};
 use anyhow::Context;
+use lemmy_api_structs::blocking;
 use lemmy_db::{
   naive_now,
   user::{UserForm, User_},

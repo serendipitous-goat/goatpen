@@ -1,7 +1,6 @@
 use crate::{
   api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, Perform},
   apub::fetcher::search_by_apub_id,
-  blocking,
   version,
   websocket::{
     messages::{GetUsersOnline, SendAllMessage},
@@ -11,7 +10,7 @@ use crate::{
 };
 use actix_web::web::Data;
 use anyhow::Context;
-use lemmy_api_structs::{site::*, user::Register};
+use lemmy_api_structs::{blocking, site::*, user::Register};
 use lemmy_db::{
   category::*,
   comment_view::*,

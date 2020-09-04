@@ -1,7 +1,6 @@
 use crate::{
   api::{check_community_ban, get_user_from_jwt, get_user_from_jwt_opt, is_mod_or_admin, Perform},
   apub::{ApubLikeableType, ApubObjectType},
-  blocking,
   fetch_iframely_and_pictrs_data,
   websocket::{
     messages::{GetPostUsersOnline, JoinCommunityRoom, JoinPostRoom, SendPost},
@@ -10,7 +9,7 @@ use crate::{
   LemmyContext,
 };
 use actix_web::web::Data;
-use lemmy_api_structs::post::*;
+use lemmy_api_structs::{blocking, post::*};
 use lemmy_db::{
   comment_view::*,
   community_view::*,

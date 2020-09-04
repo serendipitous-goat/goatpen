@@ -1,7 +1,6 @@
 use crate::{
   api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, is_mod_or_admin, Perform},
   apub::ActorType,
-  blocking,
   websocket::{
     messages::{GetCommunityUsersOnline, JoinCommunityRoom, SendCommunityRoomMessage},
     UserOperation,
@@ -10,7 +9,7 @@ use crate::{
 };
 use actix_web::web::Data;
 use anyhow::Context;
-use lemmy_api_structs::community::*;
+use lemmy_api_structs::{blocking, community::*};
 use lemmy_db::{
   comment::Comment,
   comment_view::CommentQueryBuilder,
