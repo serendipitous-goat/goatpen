@@ -6,6 +6,7 @@ extern crate serde;
 #[macro_use]
 extern crate strum_macros;
 extern crate chrono;
+extern crate serde_json;
 
 pub mod comment;
 pub mod community;

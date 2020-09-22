@@ -1,7 +1,27 @@
 use crate::{comment::CommentResponse, post::PostResponse};
 use actix::{prelude::*, Recipient};
-use lemmy_utils::{CommunityId, ConnectionId, IPAddr, PostId, UserId};
+use lemmy_utils::{CommunityId, ConnectionId, IPAddr, LemmyError, PostId, UserId};
 use serde::{Deserialize, Serialize};
+
+pub fn serialize_websocket_message<Response>(
+  op: &UserOperation,
+  data: &Response,
+) -> Result<String, LemmyError>
+where
+  Response: Serialize,
+{
+  let response = WebsocketResponse {
+    op: op.to_string(),
+    data,
+  };
+  Ok(serde_json::to_string(&response)?)
+}
+
+#[derive(Serialize)]
+struct WebsocketResponse<T> {
+  op: String,
+  data: T,
+}
 
 #[derive(EnumString, ToString, Debug, Clone)]
 pub enum UserOperation {

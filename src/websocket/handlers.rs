@@ -1,58 +1,20 @@
 use crate::{
-  api::Perform,
   websocket::chat_server::{ChatServer, SessionInfo},
   LemmyContext,
 };
 use actix::{Actor, Context, Handler, ResponseFuture};
-use actix_web::web;
 use lemmy_db::naive_now;
-use lemmy_rate_limit::RateLimit;
 use lemmy_structs::websocket::*;
-use lemmy_utils::{ConnectionId, IPAddr, LemmyError};
+use lemmy_utils::ConnectionId;
 use log::{error, info};
 use rand::Rng;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-pub(super) struct Args<'a> {
-  pub(super) context: LemmyContext,
-  pub(super) rate_limiter: RateLimit,
-  pub(super) id: ConnectionId,
-  pub(super) ip: IPAddr,
-  pub(super) op: UserOperation,
-  pub(super) data: &'a str,
-}
-
-pub(super) async fn do_user_operation<'a, 'b, Data>(args: Args<'b>) -> Result<String, LemmyError>
-where
-  for<'de> Data: Deserialize<'de> + 'a,
-  Data: Perform,
-{
-  let Args {
-    context,
-    rate_limiter,
-    id,
-    ip,
-    op,
-    data,
-  } = args;
-
-  let data = data.to_string();
-  let op2 = op.clone();
-
-  let fut = async move {
-    let parsed_data: Data = serde_json::from_str(&data)?;
-    let res = parsed_data
-      .perform(&web::Data::new(context), Some(id))
-      .await?;
-    to_json_string(&op, &res)
-  };
-
-  match op2 {
-    UserOperation::Register => rate_limiter.register().wrap(ip, fut).await,
-    UserOperation::CreatePost => rate_limiter.post().wrap(ip, fut).await,
-    UserOperation::CreateCommunity => rate_limiter.register().wrap(ip, fut).await,
-    _ => rate_limiter.message().wrap(ip, fut).await,
-  }
+pub struct Args<'a> {
+  pub context: LemmyContext,
+  pub id: ConnectionId,
+  pub op: UserOperation,
+  pub data: &'a str,
 }
 
 /// Make actor from `ChatServer`
@@ -239,26 +201,6 @@ impl Handler<GetCommunityUsersOnline> for ChatServer {
       0
     }
   }
-}
-
-#[derive(Serialize)]
-struct WebsocketResponse<T> {
-  op: String,
-  data: T,
-}
-
-pub(super) fn to_json_string<Response>(
-  op: &UserOperation,
-  data: &Response,
-) -> Result<String, LemmyError>
-where
-  Response: Serialize,
-{
-  let response = WebsocketResponse {
-    op: op.to_string(),
-    data,
-  };
-  Ok(serde_json::to_string(&response)?)
 }
 
 impl Handler<CaptchaItem> for ChatServer {

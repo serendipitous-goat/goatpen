@@ -1887,6 +1887,7 @@ dependencies = [
  "lemmy_utils",
  "log",
  "serde 1.0.116",
+ "serde_json",
  "strum",
  "strum_macros",
 ]
