@@ -1,4 +1,4 @@
-use crate::{websocket::handlers::Args, LemmyContext};
+use crate::LemmyContext;
 use actix::prelude::*;
 use anyhow::Context as acontext;
 use background_jobs::QueueHandle;
@@ -28,8 +28,12 @@ use std::{
 };
 use tokio::macros::support::Pin;
 
-type MessageHandlerType =
-  fn(args: Args) -> Pin<Box<dyn Future<Output = Result<String, LemmyError>> + '_>>;
+type MessageHandlerType = fn(
+  context: LemmyContext,
+  id: ConnectionId,
+  op: UserOperation,
+  data: &str,
+) -> Pin<Box<dyn Future<Output = Result<String, LemmyError>> + '_>>;
 
 /// `ChatServer` manages chat rooms and responsible for coordinating chat
 /// session.
@@ -373,14 +377,8 @@ impl ChatServer {
         client,
         activity_queue,
       };
-      let args = Args {
-        context,
-        id: msg.id,
-        op: user_operation.clone(),
-        data,
-      };
 
-      let fut = (message_handler)(args);
+      let fut = (message_handler)(context, msg.id, user_operation.clone(), data);
       match user_operation {
         UserOperation::Register => rate_limiter.register().wrap(ip, fut).await,
         UserOperation::CreatePost => rate_limiter.post().wrap(ip, fut).await,

@@ -19,7 +19,7 @@ use lazy_static::lazy_static;
 use lemmy_db::get_database_url_from_env;
 use lemmy_rate_limit::{rate_limiter::RateLimiter, RateLimit};
 use lemmy_server::{
-  api::xxx,
+  api::match_websocket_operation,
   apub::activity_queue::create_activity_queue,
   code_migrations::run_advanced_migrations,
   routes::*,
@@ -78,7 +78,7 @@ async fn main() -> Result<(), LemmyError> {
   let chat_server = ChatServer::startup(
     pool.clone(),
     rate_limiter.clone(),
-    |args| Box::pin(xxx(args)),
+    |c, i, o, d| Box::pin(match_websocket_operation(c, i, o, d)),
     Client::default(),
     activity_queue.clone(),
   )

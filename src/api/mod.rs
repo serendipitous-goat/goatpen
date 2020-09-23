@@ -1,4 +1,4 @@
-use crate::{api::claims::Claims, websocket::handlers::Args, DbPool, LemmyContext};
+use crate::{api::claims::Claims, DbPool, LemmyContext};
 use actix_web::{web, web::Data};
 use lemmy_db::{
   community::Community,
@@ -106,26 +106,168 @@ pub(in crate::api) async fn check_community_ban(
   }
 }
 
-pub(super) async fn do_user_operation<'a, 'b, Data>(args: Args<'b>) -> Result<String, LemmyError>
-where
-  for<'de> Data: Deserialize<'de> + 'a,
-  Data: Perform,
-{
-  let Args {
-    context,
-    id,
-    op,
-    data,
-  } = args;
-
-  do_websocket_operation::<Data>(context, data, id, op).await
-}
-
-pub async fn do_websocket_operation<'a, 'b, Data>(
+pub async fn match_websocket_operation(
   context: LemmyContext,
-  data: &'a str,
   id: ConnectionId,
   op: UserOperation,
+  data: &str,
+) -> Result<String, LemmyError> {
+  match op {
+    // User ops
+    UserOperation::Login => do_websocket_operation::<Login>(context, id, op, data).await,
+    UserOperation::Register => do_websocket_operation::<Register>(context, id, op, data).await,
+    UserOperation::GetCaptcha => do_websocket_operation::<GetCaptcha>(context, id, op, data).await,
+    UserOperation::GetUserDetails => {
+      do_websocket_operation::<GetUserDetails>(context, id, op, data).await
+    }
+    UserOperation::GetReplies => do_websocket_operation::<GetReplies>(context, id, op, data).await,
+    UserOperation::AddAdmin => do_websocket_operation::<AddAdmin>(context, id, op, data).await,
+    UserOperation::BanUser => do_websocket_operation::<BanUser>(context, id, op, data).await,
+    UserOperation::GetUserMentions => {
+      do_websocket_operation::<GetUserMentions>(context, id, op, data).await
+    }
+    UserOperation::MarkUserMentionAsRead => {
+      do_websocket_operation::<MarkUserMentionAsRead>(context, id, op, data).await
+    }
+    UserOperation::MarkAllAsRead => {
+      do_websocket_operation::<MarkAllAsRead>(context, id, op, data).await
+    }
+    UserOperation::DeleteAccount => {
+      do_websocket_operation::<DeleteAccount>(context, id, op, data).await
+    }
+    UserOperation::PasswordReset => {
+      do_websocket_operation::<PasswordReset>(context, id, op, data).await
+    }
+    UserOperation::PasswordChange => {
+      do_websocket_operation::<PasswordChange>(context, id, op, data).await
+    }
+    UserOperation::UserJoin => do_websocket_operation::<UserJoin>(context, id, op, data).await,
+    UserOperation::PostJoin => do_websocket_operation::<PostJoin>(context, id, op, data).await,
+    UserOperation::CommunityJoin => {
+      do_websocket_operation::<CommunityJoin>(context, id, op, data).await
+    }
+    UserOperation::SaveUserSettings => {
+      do_websocket_operation::<SaveUserSettings>(context, id, op, data).await
+    }
+
+    // Private Message ops
+    UserOperation::CreatePrivateMessage => {
+      do_websocket_operation::<CreatePrivateMessage>(context, id, op, data).await
+    }
+    UserOperation::EditPrivateMessage => {
+      do_websocket_operation::<EditPrivateMessage>(context, id, op, data).await
+    }
+    UserOperation::DeletePrivateMessage => {
+      do_websocket_operation::<DeletePrivateMessage>(context, id, op, data).await
+    }
+    UserOperation::MarkPrivateMessageAsRead => {
+      do_websocket_operation::<MarkPrivateMessageAsRead>(context, id, op, data).await
+    }
+    UserOperation::GetPrivateMessages => {
+      do_websocket_operation::<GetPrivateMessages>(context, id, op, data).await
+    }
+
+    // Site ops
+    UserOperation::GetModlog => do_websocket_operation::<GetModlog>(context, id, op, data).await,
+    UserOperation::CreateSite => do_websocket_operation::<CreateSite>(context, id, op, data).await,
+    UserOperation::EditSite => do_websocket_operation::<EditSite>(context, id, op, data).await,
+    UserOperation::GetSite => do_websocket_operation::<GetSite>(context, id, op, data).await,
+    UserOperation::GetSiteConfig => {
+      do_websocket_operation::<GetSiteConfig>(context, id, op, data).await
+    }
+    UserOperation::SaveSiteConfig => {
+      do_websocket_operation::<SaveSiteConfig>(context, id, op, data).await
+    }
+    UserOperation::Search => do_websocket_operation::<Search>(context, id, op, data).await,
+    UserOperation::TransferCommunity => {
+      do_websocket_operation::<TransferCommunity>(context, id, op, data).await
+    }
+    UserOperation::TransferSite => {
+      do_websocket_operation::<TransferSite>(context, id, op, data).await
+    }
+    UserOperation::ListCategories => {
+      do_websocket_operation::<ListCategories>(context, id, op, data).await
+    }
+
+    // Community ops
+    UserOperation::GetCommunity => {
+      do_websocket_operation::<GetCommunity>(context, id, op, data).await
+    }
+    UserOperation::ListCommunities => {
+      do_websocket_operation::<ListCommunities>(context, id, op, data).await
+    }
+    UserOperation::CreateCommunity => {
+      do_websocket_operation::<CreateCommunity>(context, id, op, data).await
+    }
+    UserOperation::EditCommunity => {
+      do_websocket_operation::<EditCommunity>(context, id, op, data).await
+    }
+    UserOperation::DeleteCommunity => {
+      do_websocket_operation::<DeleteCommunity>(context, id, op, data).await
+    }
+    UserOperation::RemoveCommunity => {
+      do_websocket_operation::<RemoveCommunity>(context, id, op, data).await
+    }
+    UserOperation::FollowCommunity => {
+      do_websocket_operation::<FollowCommunity>(context, id, op, data).await
+    }
+    UserOperation::GetFollowedCommunities => {
+      do_websocket_operation::<GetFollowedCommunities>(context, id, op, data).await
+    }
+    UserOperation::BanFromCommunity => {
+      do_websocket_operation::<BanFromCommunity>(context, id, op, data).await
+    }
+    UserOperation::AddModToCommunity => {
+      do_websocket_operation::<AddModToCommunity>(context, id, op, data).await
+    }
+
+    // Post ops
+    UserOperation::CreatePost => do_websocket_operation::<CreatePost>(context, id, op, data).await,
+    UserOperation::GetPost => do_websocket_operation::<GetPost>(context, id, op, data).await,
+    UserOperation::GetPosts => do_websocket_operation::<GetPosts>(context, id, op, data).await,
+    UserOperation::EditPost => do_websocket_operation::<EditPost>(context, id, op, data).await,
+    UserOperation::DeletePost => do_websocket_operation::<DeletePost>(context, id, op, data).await,
+    UserOperation::RemovePost => do_websocket_operation::<RemovePost>(context, id, op, data).await,
+    UserOperation::LockPost => do_websocket_operation::<LockPost>(context, id, op, data).await,
+    UserOperation::StickyPost => do_websocket_operation::<StickyPost>(context, id, op, data).await,
+    UserOperation::CreatePostLike => {
+      do_websocket_operation::<CreatePostLike>(context, id, op, data).await
+    }
+    UserOperation::SavePost => do_websocket_operation::<SavePost>(context, id, op, data).await,
+
+    // Comment ops
+    UserOperation::CreateComment => {
+      do_websocket_operation::<CreateComment>(context, id, op, data).await
+    }
+    UserOperation::EditComment => {
+      do_websocket_operation::<EditComment>(context, id, op, data).await
+    }
+    UserOperation::DeleteComment => {
+      do_websocket_operation::<DeleteComment>(context, id, op, data).await
+    }
+    UserOperation::RemoveComment => {
+      do_websocket_operation::<RemoveComment>(context, id, op, data).await
+    }
+    UserOperation::MarkCommentAsRead => {
+      do_websocket_operation::<MarkCommentAsRead>(context, id, op, data).await
+    }
+    UserOperation::SaveComment => {
+      do_websocket_operation::<SaveComment>(context, id, op, data).await
+    }
+    UserOperation::GetComments => {
+      do_websocket_operation::<GetComments>(context, id, op, data).await
+    }
+    UserOperation::CreateCommentLike => {
+      do_websocket_operation::<CreateCommentLike>(context, id, op, data).await
+    }
+  }
+}
+
+async fn do_websocket_operation<'a, 'b, Data>(
+  context: LemmyContext,
+  id: ConnectionId,
+  op: UserOperation,
+  data: &str,
 ) -> Result<String, LemmyError>
 where
   for<'de> Data: Deserialize<'de> + 'a,
@@ -136,84 +278,4 @@ where
     .perform(&web::Data::new(context), Some(id))
     .await?;
   serialize_websocket_message(&op, &res)
-}
-
-pub async fn xxx(args: Args<'_>) -> Result<String, LemmyError> {
-  match args.op {
-    // User ops
-    UserOperation::Login => do_user_operation::<Login>(args).await,
-    UserOperation::Register => do_user_operation::<Register>(args).await,
-    UserOperation::GetCaptcha => do_user_operation::<GetCaptcha>(args).await,
-    UserOperation::GetUserDetails => do_user_operation::<GetUserDetails>(args).await,
-    UserOperation::GetReplies => do_user_operation::<GetReplies>(args).await,
-    UserOperation::AddAdmin => do_user_operation::<AddAdmin>(args).await,
-    UserOperation::BanUser => do_user_operation::<BanUser>(args).await,
-    UserOperation::GetUserMentions => do_user_operation::<GetUserMentions>(args).await,
-    UserOperation::MarkUserMentionAsRead => do_user_operation::<MarkUserMentionAsRead>(args).await,
-    UserOperation::MarkAllAsRead => do_user_operation::<MarkAllAsRead>(args).await,
-    UserOperation::DeleteAccount => do_user_operation::<DeleteAccount>(args).await,
-    UserOperation::PasswordReset => do_user_operation::<PasswordReset>(args).await,
-    UserOperation::PasswordChange => do_user_operation::<PasswordChange>(args).await,
-    UserOperation::UserJoin => do_user_operation::<UserJoin>(args).await,
-    UserOperation::PostJoin => do_user_operation::<PostJoin>(args).await,
-    UserOperation::CommunityJoin => do_user_operation::<CommunityJoin>(args).await,
-    UserOperation::SaveUserSettings => do_user_operation::<SaveUserSettings>(args).await,
-
-    // Private Message ops
-    UserOperation::CreatePrivateMessage => do_user_operation::<CreatePrivateMessage>(args).await,
-    UserOperation::EditPrivateMessage => do_user_operation::<EditPrivateMessage>(args).await,
-    UserOperation::DeletePrivateMessage => do_user_operation::<DeletePrivateMessage>(args).await,
-    UserOperation::MarkPrivateMessageAsRead => {
-      do_user_operation::<MarkPrivateMessageAsRead>(args).await
-    }
-    UserOperation::GetPrivateMessages => do_user_operation::<GetPrivateMessages>(args).await,
-
-    // Site ops
-    UserOperation::GetModlog => do_user_operation::<GetModlog>(args).await,
-    UserOperation::CreateSite => do_user_operation::<CreateSite>(args).await,
-    UserOperation::EditSite => do_user_operation::<EditSite>(args).await,
-    UserOperation::GetSite => do_user_operation::<GetSite>(args).await,
-    UserOperation::GetSiteConfig => do_user_operation::<GetSiteConfig>(args).await,
-    UserOperation::SaveSiteConfig => do_user_operation::<SaveSiteConfig>(args).await,
-    UserOperation::Search => do_user_operation::<Search>(args).await,
-    UserOperation::TransferCommunity => do_user_operation::<TransferCommunity>(args).await,
-    UserOperation::TransferSite => do_user_operation::<TransferSite>(args).await,
-    UserOperation::ListCategories => do_user_operation::<ListCategories>(args).await,
-
-    // Community ops
-    UserOperation::GetCommunity => do_user_operation::<GetCommunity>(args).await,
-    UserOperation::ListCommunities => do_user_operation::<ListCommunities>(args).await,
-    UserOperation::CreateCommunity => do_user_operation::<CreateCommunity>(args).await,
-    UserOperation::EditCommunity => do_user_operation::<EditCommunity>(args).await,
-    UserOperation::DeleteCommunity => do_user_operation::<DeleteCommunity>(args).await,
-    UserOperation::RemoveCommunity => do_user_operation::<RemoveCommunity>(args).await,
-    UserOperation::FollowCommunity => do_user_operation::<FollowCommunity>(args).await,
-    UserOperation::GetFollowedCommunities => {
-      do_user_operation::<GetFollowedCommunities>(args).await
-    }
-    UserOperation::BanFromCommunity => do_user_operation::<BanFromCommunity>(args).await,
-    UserOperation::AddModToCommunity => do_user_operation::<AddModToCommunity>(args).await,
-
-    // Post ops
-    UserOperation::CreatePost => do_user_operation::<CreatePost>(args).await,
-    UserOperation::GetPost => do_user_operation::<GetPost>(args).await,
-    UserOperation::GetPosts => do_user_operation::<GetPosts>(args).await,
-    UserOperation::EditPost => do_user_operation::<EditPost>(args).await,
-    UserOperation::DeletePost => do_user_operation::<DeletePost>(args).await,
-    UserOperation::RemovePost => do_user_operation::<RemovePost>(args).await,
-    UserOperation::LockPost => do_user_operation::<LockPost>(args).await,
-    UserOperation::StickyPost => do_user_operation::<StickyPost>(args).await,
-    UserOperation::CreatePostLike => do_user_operation::<CreatePostLike>(args).await,
-    UserOperation::SavePost => do_user_operation::<SavePost>(args).await,
-
-    // Comment ops
-    UserOperation::CreateComment => do_user_operation::<CreateComment>(args).await,
-    UserOperation::EditComment => do_user_operation::<EditComment>(args).await,
-    UserOperation::DeleteComment => do_user_operation::<DeleteComment>(args).await,
-    UserOperation::RemoveComment => do_user_operation::<RemoveComment>(args).await,
-    UserOperation::MarkCommentAsRead => do_user_operation::<MarkCommentAsRead>(args).await,
-    UserOperation::SaveComment => do_user_operation::<SaveComment>(args).await,
-    UserOperation::GetComments => do_user_operation::<GetComments>(args).await,
-    UserOperation::CreateCommentLike => do_user_operation::<CreateCommentLike>(args).await,
-  }
 }

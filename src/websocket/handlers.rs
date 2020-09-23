@@ -1,21 +1,10 @@
-use crate::{
-  websocket::chat_server::{ChatServer, SessionInfo},
-  LemmyContext,
-};
+use crate::websocket::chat_server::{ChatServer, SessionInfo};
 use actix::{Actor, Context, Handler, ResponseFuture};
 use lemmy_db::naive_now;
 use lemmy_structs::websocket::*;
-use lemmy_utils::ConnectionId;
 use log::{error, info};
 use rand::Rng;
 use serde::Serialize;
-
-pub struct Args<'a> {
-  pub context: LemmyContext,
-  pub id: ConnectionId,
-  pub op: UserOperation,
-  pub data: &'a str,
-}
 
 /// Make actor from `ChatServer`
 impl Actor for ChatServer {
