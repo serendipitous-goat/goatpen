@@ -1,4 +1,4 @@
-use crate::apub::ActorType;
+use crate::ActorType;
 use activitystreams::unparsed::UnparsedMutExt;
 use activitystreams_ext::UnparsedExtension;
 use actix_web::{client::ClientRequest, HttpRequest};

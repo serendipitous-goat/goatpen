@@ -1,4 +1,4 @@
-use crate::apub::{
+use crate::{
   check_is_apub_id_valid,
   extensions::signatures::verify,
   fetcher::get_or_fetch_and_upsert_user,

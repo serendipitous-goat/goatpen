@@ -1,4 +1,4 @@
-use crate::apub::{
+use crate::{
   inbox::shared_inbox::{
     announce_if_community_is_local,
     get_user_from_activity,

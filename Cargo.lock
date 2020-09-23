@@ -1788,6 +1788,48 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
+name = "lemmy_apub"
+version = "0.1.0"
+dependencies = [
+ "activitystreams",
+ "activitystreams-ext",
+ "actix",
+ "actix-rt",
+ "actix-web",
+ "anyhow",
+ "async-trait",
+ "awc",
+ "background-jobs",
+ "base64 0.12.3",
+ "bcrypt",
+ "chrono",
+ "diesel",
+ "futures",
+ "http",
+ "http-signature-normalization-actix",
+ "itertools",
+ "lazy_static",
+ "lemmy_db",
+ "lemmy_structs",
+ "lemmy_utils",
+ "lemmy_websocket",
+ "log",
+ "openssl",
+ "percent-encoding",
+ "rand 0.7.3",
+ "reqwest",
+ "serde 1.0.116",
+ "serde_json",
+ "sha2",
+ "strum",
+ "strum_macros",
+ "thiserror",
+ "tokio",
+ "url",
+ "uuid 0.8.1",
+]
+
+[[package]]
 name = "lemmy_db"
 version = "0.1.0"
 dependencies = [
@@ -1822,8 +1864,6 @@ dependencies = [
 name = "lemmy_server"
 version = "0.0.1"
 dependencies = [
- "activitystreams",
- "activitystreams-ext",
  "actix",
  "actix-files",
  "actix-rt",
@@ -1847,6 +1887,7 @@ dependencies = [
  "itertools",
  "jsonwebtoken",
  "lazy_static",
+ "lemmy_apub",
  "lemmy_db",
  "lemmy_rate_limit",
  "lemmy_structs",
@@ -1873,7 +1914,6 @@ dependencies = [
 name = "lemmy_structs"
 version = "0.1.0"
 dependencies = [
- "actix",
  "actix-web",
  "chrono",
  "diesel",
@@ -1901,6 +1941,7 @@ dependencies = [
  "openssl",
  "rand 0.7.3",
  "regex",
+ "reqwest",
  "serde 1.0.116",
  "serde_json",
  "thiserror",

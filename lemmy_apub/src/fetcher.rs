@@ -1,14 +1,11 @@
 use crate::{
-  apub::{
-    check_is_apub_id_valid,
-    ActorType,
-    FromApub,
-    GroupExt,
-    PageExt,
-    PersonExt,
-    APUB_JSON_CONTENT_TYPE,
-  },
-  request::{retry, RecvError},
+  check_is_apub_id_valid,
+  ActorType,
+  FromApub,
+  GroupExt,
+  PageExt,
+  PersonExt,
+  APUB_JSON_CONTENT_TYPE,
 };
 use activitystreams::{base::BaseExt, collection::OrderedCollection, object::Note, prelude::*};
 use anyhow::{anyhow, Context};
@@ -29,7 +26,12 @@ use lemmy_db::{
   SearchType,
 };
 use lemmy_structs::{blocking, site::SearchResponse};
-use lemmy_utils::{apub::get_apub_protocol_string, location_info, LemmyError};
+use lemmy_utils::{
+  apub::get_apub_protocol_string,
+  location_info,
+  request::{retry, RecvError},
+  LemmyError,
+};
 use lemmy_websocket::LemmyContext;
 use log::debug;
 use reqwest::Client;

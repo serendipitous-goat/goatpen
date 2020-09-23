@@ -1,17 +1,14 @@
 use crate::{
-  apub::{
-    activities::generate_activity_id,
-    activity_queue::send_activity,
-    check_actor_domain,
-    create_apub_response,
-    fetcher::get_or_fetch_and_upsert_actor,
-    insert_activity,
-    ActorType,
-    FromApub,
-    PersonExt,
-    ToApub,
-  },
-  DbPool,
+  activities::generate_activity_id,
+  activity_queue::send_activity,
+  check_actor_domain,
+  create_apub_response,
+  fetcher::get_or_fetch_and_upsert_actor,
+  insert_activity,
+  ActorType,
+  FromApub,
+  PersonExt,
+  ToApub,
 };
 use activitystreams::{
   activity::{
@@ -29,6 +26,7 @@ use anyhow::Context;
 use lemmy_db::{
   naive_now,
   user::{UserForm, User_},
+  DbPool,
 };
 use lemmy_structs::blocking;
 use lemmy_utils::{

@@ -1,4 +1,4 @@
-use crate::apub::inbox::{
+use crate::inbox::{
   activities::{
     create::receive_create,
     delete::receive_delete,

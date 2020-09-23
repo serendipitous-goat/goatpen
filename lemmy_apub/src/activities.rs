@@ -1,4 +1,4 @@
-use crate::apub::{activity_queue::send_activity, community::do_announce, insert_activity};
+use crate::{activity_queue::send_activity, community::do_announce, insert_activity};
 use activitystreams::{
   base::{Extends, ExtendsExt},
   object::AsObject,
@@ -35,7 +35,7 @@ where
   Ok(())
 }
 
-pub(in crate::apub) fn generate_activity_id<T>(kind: T) -> Result<Url, ParseError>
+pub(in crate) fn generate_activity_id<T>(kind: T) -> Result<Url, ParseError>
 where
   T: ToString,
 {

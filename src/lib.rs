@@ -1,18 +1,18 @@
 #![recursion_limit = "512"]
-#[macro_use]
-extern crate lazy_static;
 
 pub mod api;
-pub mod apub;
 pub mod code_migrations;
-pub mod request;
 pub mod routes;
 pub mod version;
 
-use crate::request::{retry, RecvError};
 use anyhow::anyhow;
 use lemmy_db::DbPool;
-use lemmy_utils::{apub::get_apub_protocol_string, settings::Settings, LemmyError};
+use lemmy_utils::{
+  apub::get_apub_protocol_string,
+  request::{retry, RecvError},
+  settings::Settings,
+  LemmyError,
+};
 use log::error;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use reqwest::Client;

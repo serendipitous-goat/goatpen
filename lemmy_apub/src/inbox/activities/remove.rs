@@ -1,4 +1,4 @@
-use crate::apub::{
+use crate::{
   fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
   inbox::shared_inbox::{
     announce_if_community_is_local,

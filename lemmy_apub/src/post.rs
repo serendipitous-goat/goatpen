@@ -1,20 +1,17 @@
 use crate::{
-  apub::{
-    activities::{generate_activity_id, send_activity_to_community},
-    check_actor_domain,
-    create_apub_response,
-    create_apub_tombstone_response,
-    create_tombstone,
-    extensions::page_extension::PageExtension,
-    fetcher::{get_or_fetch_and_upsert_community, get_or_fetch_and_upsert_user},
-    ActorType,
-    ApubLikeableType,
-    ApubObjectType,
-    FromApub,
-    PageExt,
-    ToApub,
-  },
-  DbPool,
+  activities::{generate_activity_id, send_activity_to_community},
+  check_actor_domain,
+  create_apub_response,
+  create_apub_tombstone_response,
+  create_tombstone,
+  extensions::page_extension::PageExtension,
+  fetcher::{get_or_fetch_and_upsert_community, get_or_fetch_and_upsert_user},
+  ActorType,
+  ApubLikeableType,
+  ApubObjectType,
+  FromApub,
+  PageExt,
+  ToApub,
 };
 use activitystreams::{
   activity::{
@@ -39,6 +36,7 @@ use lemmy_db::{
   post::{Post, PostForm},
   user::User_,
   Crud,
+  DbPool,
 };
 use lemmy_structs::blocking;
 use lemmy_utils::{

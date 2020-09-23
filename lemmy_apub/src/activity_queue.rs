@@ -1,4 +1,4 @@
-use crate::apub::{check_is_apub_id_valid, extensions::signatures::sign, ActorType};
+use crate::{check_is_apub_id_valid, extensions::signatures::sign, ActorType};
 use activitystreams::{
   base::{Extends, ExtendsExt},
   object::AsObject,

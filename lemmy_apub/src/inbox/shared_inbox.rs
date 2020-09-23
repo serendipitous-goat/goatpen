@@ -1,4 +1,4 @@
-use crate::apub::{
+use crate::{
   check_is_apub_id_valid,
   community::do_announce,
   extensions::signatures::verify,
@@ -95,7 +95,7 @@ pub async fn shared_inbox(
   res
 }
 
-pub(in crate::apub::inbox) fn receive_unhandled_activity<A>(
+pub(in crate::inbox) fn receive_unhandled_activity<A>(
   activity: A,
 ) -> Result<HttpResponse, LemmyError>
 where
@@ -105,7 +105,7 @@ where
   Ok(HttpResponse::NotImplemented().finish())
 }
 
-pub(in crate::apub::inbox) async fn get_user_from_activity<T, A>(
+pub(in crate::inbox) async fn get_user_from_activity<T, A>(
   activity: &T,
   context: &LemmyContext,
 ) -> Result<User_, LemmyError>
@@ -117,7 +117,7 @@ where
   get_or_fetch_and_upsert_user(&user_uri, context).await
 }
 
-pub(in crate::apub::inbox) fn get_community_id_from_activity<T, A>(
+pub(in crate::inbox) fn get_community_id_from_activity<T, A>(
   activity: &T,
 ) -> Result<Url, LemmyError>
 where
@@ -134,7 +134,7 @@ where
   )
 }
 
-pub(in crate::apub::inbox) async fn announce_if_community_is_local<T, Kind>(
+pub(in crate::inbox) async fn announce_if_community_is_local<T, Kind>(
   activity: T,
   user: &User_,
   context: &LemmyContext,

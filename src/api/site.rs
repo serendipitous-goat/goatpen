@@ -1,10 +1,10 @@
 use crate::{
   api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, Perform},
-  apub::fetcher::search_by_apub_id,
   version,
 };
 use actix_web::web::Data;
 use anyhow::Context;
+use lemmy_apub::fetcher::search_by_apub_id;
 use lemmy_db::{
   category::*,
   comment_view::*,

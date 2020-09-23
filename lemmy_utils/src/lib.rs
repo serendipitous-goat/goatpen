@@ -3,6 +3,7 @@ extern crate lazy_static;
 
 pub mod apub;
 pub mod email;
+pub mod request;
 pub mod settings;
 #[cfg(test)]
 mod test;

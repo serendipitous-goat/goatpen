@@ -1,18 +1,15 @@
 use crate::{
-  apub::{
-    activities::generate_activity_id,
-    activity_queue::send_activity,
-    check_actor_domain,
-    check_is_apub_id_valid,
-    create_tombstone,
-    fetcher::get_or_fetch_and_upsert_user,
-    insert_activity,
-    ActorType,
-    ApubObjectType,
-    FromApub,
-    ToApub,
-  },
-  DbPool,
+  activities::generate_activity_id,
+  activity_queue::send_activity,
+  check_actor_domain,
+  check_is_apub_id_valid,
+  create_tombstone,
+  fetcher::get_or_fetch_and_upsert_user,
+  insert_activity,
+  ActorType,
+  ApubObjectType,
+  FromApub,
+  ToApub,
 };
 use activitystreams::{
   activity::{
@@ -30,6 +27,7 @@ use lemmy_db::{
   private_message::{PrivateMessage, PrivateMessageForm},
   user::User_,
   Crud,
+  DbPool,
 };
 use lemmy_structs::blocking;
 use lemmy_utils::{location_info, utils::convert_datetime, LemmyError};
