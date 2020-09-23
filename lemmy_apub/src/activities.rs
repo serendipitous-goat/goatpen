@@ -1,13 +1,11 @@
-use crate::{
-  apub::{activity_queue::send_activity, community::do_announce, insert_activity},
-  LemmyContext,
-};
+use crate::apub::{activity_queue::send_activity, community::do_announce, insert_activity};
 use activitystreams::{
   base::{Extends, ExtendsExt},
   object::AsObject,
 };
 use lemmy_db::{community::Community, user::User_};
 use lemmy_utils::{apub::get_apub_protocol_string, settings::Settings, LemmyError};
+use lemmy_websocket::LemmyContext;
 use serde::{export::fmt::Debug, Serialize};
 use url::{ParseError, Url};
 use uuid::Uuid;

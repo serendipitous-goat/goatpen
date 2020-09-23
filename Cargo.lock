@@ -1104,12 +1104,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "212d0f5754cb6769937f4501cc0e67f4f4483c8d2c3e1e922ee9edbe4ab4c7c0"
 
 [[package]]
-name = "dotenv"
-version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
-
-[[package]]
 name = "dtoa"
 version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1846,7 +1840,6 @@ dependencies = [
  "chrono",
  "diesel",
  "diesel_migrations",
- "dotenv",
  "env_logger",
  "futures",
  "http",
@@ -1858,6 +1851,7 @@ dependencies = [
  "lemmy_rate_limit",
  "lemmy_structs",
  "lemmy_utils",
+ "lemmy_websocket",
  "log",
  "openssl",
  "percent-encoding",
@@ -1888,8 +1882,6 @@ dependencies = [
  "log",
  "serde 1.0.116",
  "serde_json",
- "strum",
- "strum_macros",
 ]
 
 [[package]]
@@ -1913,6 +1905,29 @@ dependencies = [
  "serde_json",
  "thiserror",
  "url",
+]
+
+[[package]]
+name = "lemmy_websocket"
+version = "0.1.0"
+dependencies = [
+ "actix",
+ "anyhow",
+ "background-jobs",
+ "chrono",
+ "diesel",
+ "lemmy_db",
+ "lemmy_rate_limit",
+ "lemmy_structs",
+ "lemmy_utils",
+ "log",
+ "rand 0.7.3",
+ "reqwest",
+ "serde 1.0.116",
+ "serde_json",
+ "strum",
+ "strum_macros",
+ "tokio",
 ]
 
 [[package]]

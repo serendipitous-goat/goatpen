@@ -1,4 +1,4 @@
-use crate::{api::claims::Claims, DbPool, LemmyContext};
+use crate::{api::claims::Claims, DbPool};
 use actix_web::{web, web::Data};
 use lemmy_db::{
   community::Community,
@@ -7,16 +7,9 @@ use lemmy_db::{
   user::User_,
   Crud,
 };
-use lemmy_structs::{
-  blocking,
-  comment::*,
-  community::*,
-  post::*,
-  site::*,
-  user::*,
-  websocket::{serialize_websocket_message, UserOperation},
-};
+use lemmy_structs::{blocking, comment::*, community::*, post::*, site::*, user::*};
 use lemmy_utils::{APIError, ConnectionId, LemmyError};
+use lemmy_websocket::{serialize_websocket_message, LemmyContext, UserOperation};
 use serde::Deserialize;
 
 pub mod claims;

@@ -12,7 +12,6 @@ use crate::{
     ToApub,
   },
   DbPool,
-  LemmyContext,
 };
 use activitystreams::{
   activity::{
@@ -37,6 +36,7 @@ use lemmy_utils::{
   utils::{check_slurs, check_slurs_opt, convert_datetime},
   LemmyError,
 };
+use lemmy_websocket::LemmyContext;
 use serde::Deserialize;
 use url::Url;
 

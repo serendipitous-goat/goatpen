@@ -1,23 +1,6 @@
 #![recursion_limit = "512"]
 #[macro_use]
 extern crate lazy_static;
-extern crate actix;
-extern crate actix_web;
-extern crate base64;
-extern crate bcrypt;
-extern crate captcha;
-extern crate chrono;
-extern crate diesel;
-extern crate dotenv;
-extern crate jsonwebtoken;
-extern crate log;
-extern crate openssl;
-extern crate reqwest;
-extern crate rss;
-extern crate serde;
-extern crate serde_json;
-extern crate sha2;
-extern crate strum;
 
 pub mod api;
 pub mod apub;
@@ -25,15 +8,9 @@ pub mod code_migrations;
 pub mod request;
 pub mod routes;
 pub mod version;
-pub mod websocket;
 
-use crate::{
-  request::{retry, RecvError},
-  websocket::chat_server::ChatServer,
-};
-use actix::Addr;
+use crate::request::{retry, RecvError};
 use anyhow::anyhow;
-use background_jobs::QueueHandle;
 use lemmy_db::DbPool;
 use lemmy_utils::{apub::get_apub_protocol_string, settings::Settings, LemmyError};
 use log::error;
@@ -41,52 +18,6 @@ use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use reqwest::Client;
 use serde::Deserialize;
 use std::process::Command;
-
-pub struct LemmyContext {
-  pub pool: DbPool,
-  pub chat_server: Addr<ChatServer>,
-  pub client: Client,
-  pub activity_queue: QueueHandle,
-}
-
-impl LemmyContext {
-  pub fn create(
-    pool: DbPool,
-    chat_server: Addr<ChatServer>,
-    client: Client,
-    activity_queue: QueueHandle,
-  ) -> LemmyContext {
-    LemmyContext {
-      pool,
-      chat_server,
-      client,
-      activity_queue,
-    }
-  }
-  pub fn pool(&self) -> &DbPool {
-    &self.pool
-  }
-  pub fn chat_server(&self) -> &Addr<ChatServer> {
-    &self.chat_server
-  }
-  pub fn client(&self) -> &Client {
-    &self.client
-  }
-  pub fn activity_queue(&self) -> &QueueHandle {
-    &self.activity_queue
-  }
-}
-
-impl Clone for LemmyContext {
-  fn clone(&self) -> Self {
-    LemmyContext {
-      pool: self.pool.clone(),
-      chat_server: self.chat_server.clone(),
-      client: self.client.clone(),
-      activity_queue: self.activity_queue.clone(),
-    }
-  }
-}
 
 #[derive(Deserialize, Debug)]
 pub struct IframelyResponse {

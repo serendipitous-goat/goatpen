@@ -1,7 +1,9 @@
-use crate::websocket::chat_server::{ChatServer, SessionInfo};
+use crate::{
+  chat_server::{ChatServer, SessionInfo},
+  messages::*,
+};
 use actix::{Actor, Context, Handler, ResponseFuture};
 use lemmy_db::naive_now;
-use lemmy_structs::websocket::*;
 use log::{error, info};
 use rand::Rng;
 use serde::Serialize;

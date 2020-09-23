@@ -1,4 +1,4 @@
-use crate::LemmyContext;
+use crate::{messages::*, serialize_websocket_message, LemmyContext, UserOperation};
 use actix::prelude::*;
 use anyhow::Context as acontext;
 use background_jobs::QueueHandle;
@@ -7,7 +7,7 @@ use diesel::{
   PgConnection,
 };
 use lemmy_rate_limit::RateLimit;
-use lemmy_structs::{comment::*, post::*, websocket::*};
+use lemmy_structs::{comment::*, post::*};
 use lemmy_utils::{
   location_info,
   APIError,
@@ -349,8 +349,6 @@ impl ChatServer {
     msg: StandardMessage,
     ctx: &mut Context<Self>,
   ) -> impl Future<Output = Result<String, LemmyError>> {
-    let addr = ctx.address();
-    let pool = self.pool.clone();
     let rate_limiter = self.rate_limiter.clone();
 
     let ip: IPAddr = match self.sessions.get(&msg.id) {
@@ -358,26 +356,21 @@ impl ChatServer {
       None => "blank_ip".to_string(),
     };
 
-    let client = self.client.clone();
-    let activity_queue = self.activity_queue.clone();
+    let context = LemmyContext {
+      pool: self.pool.clone(),
+      chat_server: ctx.address(),
+      client: self.client.to_owned(),
+      activity_queue: self.activity_queue.to_owned(),
+    };
     let message_handler = self.message_handler;
     async move {
-      let msg = msg;
       let json: Value = serde_json::from_str(&msg.msg)?;
       let data = &json["data"].to_string();
       let op = &json["op"].as_str().ok_or(APIError {
         message: "Unknown op type".to_string(),
       })?;
 
-      let user_operation: UserOperation = UserOperation::from_str(&op)?;
-
-      let context = LemmyContext {
-        pool,
-        chat_server: addr,
-        client,
-        activity_queue,
-      };
-
+      let user_operation = UserOperation::from_str(&op)?;
       let fut = (message_handler)(context, msg.id, user_operation.clone(), data);
       match user_operation {
         UserOperation::Register => rate_limiter.register().wrap(ip, fut).await,

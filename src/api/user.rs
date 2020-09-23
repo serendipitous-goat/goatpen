@@ -2,7 +2,6 @@ use crate::{
   api::{claims::Claims, get_user_from_jwt, get_user_from_jwt_opt, is_admin, Perform},
   apub::ApubObjectType,
   captcha_espeak_wav_base64,
-  LemmyContext,
 };
 use actix_web::web::Data;
 use anyhow::Context;
@@ -34,18 +33,7 @@ use lemmy_db::{
   ListingType,
   SortType,
 };
-use lemmy_structs::{
-  blocking,
-  user::*,
-  websocket::{
-    CaptchaItem,
-    CheckCaptcha,
-    JoinUserRoom,
-    SendAllMessage,
-    SendUserRoomMessage,
-    UserOperation,
-  },
-};
+use lemmy_structs::{blocking, user::*};
 use lemmy_utils::{
   apub::{generate_actor_keypair, make_apub_endpoint, EndpointType},
   email::send_email,
@@ -62,6 +50,11 @@ use lemmy_utils::{
   APIError,
   ConnectionId,
   LemmyError,
+};
+use lemmy_websocket::{
+  messages::{CaptchaItem, CheckCaptcha, JoinUserRoom, SendAllMessage, SendUserRoomMessage},
+  LemmyContext,
+  UserOperation,
 };
 use log::error;
 use std::str::FromStr;

@@ -18,7 +18,6 @@ use crate::{
     ToApub,
   },
   DbPool,
-  LemmyContext,
 };
 use activitystreams::{
   activity::{
@@ -53,6 +52,7 @@ use lemmy_utils::{
   utils::{convert_datetime, remove_slurs, scrape_text_for_mentions, MentionData},
   LemmyError,
 };
+use lemmy_websocket::LemmyContext;
 use log::debug;
 use serde::Deserialize;
 use serde_json::Error;

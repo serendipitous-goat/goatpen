@@ -2,7 +2,6 @@ use crate::{
   api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, Perform},
   apub::fetcher::search_by_apub_id,
   version,
-  LemmyContext,
 };
 use actix_web::web::Data;
 use anyhow::Context;
@@ -22,12 +21,7 @@ use lemmy_db::{
   SearchType,
   SortType,
 };
-use lemmy_structs::{
-  blocking,
-  site::*,
-  user::Register,
-  websocket::{GetUsersOnline, SendAllMessage, UserOperation},
-};
+use lemmy_structs::{blocking, site::*, user::Register};
 use lemmy_utils::{
   location_info,
   settings::Settings,
@@ -35,6 +29,11 @@ use lemmy_utils::{
   APIError,
   ConnectionId,
   LemmyError,
+};
+use lemmy_websocket::{
+  messages::{GetUsersOnline, SendAllMessage},
+  LemmyContext,
+  UserOperation,
 };
 use log::{debug, info};
 use std::str::FromStr;

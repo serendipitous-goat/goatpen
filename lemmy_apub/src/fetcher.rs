@@ -9,7 +9,6 @@ use crate::{
     APUB_JSON_CONTENT_TYPE,
   },
   request::{retry, RecvError},
-  LemmyContext,
 };
 use activitystreams::{base::BaseExt, collection::OrderedCollection, object::Note, prelude::*};
 use anyhow::{anyhow, Context};
@@ -31,6 +30,7 @@ use lemmy_db::{
 };
 use lemmy_structs::{blocking, site::SearchResponse};
 use lemmy_utils::{apub::get_apub_protocol_string, location_info, LemmyError};
+use lemmy_websocket::LemmyContext;
 use log::debug;
 use reqwest::Client;
 use serde::Deserialize;

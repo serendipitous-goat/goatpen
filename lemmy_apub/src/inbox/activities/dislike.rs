@@ -1,15 +1,12 @@
-use crate::{
-  apub::{
-    fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
-    inbox::shared_inbox::{
-      announce_if_community_is_local,
-      get_user_from_activity,
-      receive_unhandled_activity,
-    },
-    FromApub,
-    PageExt,
+use crate::apub::{
+  fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
+  inbox::shared_inbox::{
+    announce_if_community_is_local,
+    get_user_from_activity,
+    receive_unhandled_activity,
   },
-  LemmyContext,
+  FromApub,
+  PageExt,
 };
 use activitystreams::{activity::Dislike, base::AnyBase, object::Note, prelude::*};
 use actix_web::HttpResponse;
@@ -21,13 +18,13 @@ use lemmy_db::{
   post_view::PostView,
   Likeable,
 };
-use lemmy_structs::{
-  blocking,
-  comment::CommentResponse,
-  post::PostResponse,
-  websocket::{SendComment, SendPost, UserOperation},
-};
+use lemmy_structs::{blocking, comment::CommentResponse, post::PostResponse};
 use lemmy_utils::{location_info, LemmyError};
+use lemmy_websocket::{
+  messages::{SendComment, SendPost},
+  LemmyContext,
+  UserOperation,
+};
 
 pub async fn receive_dislike(
   activity: AnyBase,

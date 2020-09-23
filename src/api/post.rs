@@ -2,7 +2,6 @@ use crate::{
   api::{check_community_ban, get_user_from_jwt, get_user_from_jwt_opt, is_mod_or_admin, Perform},
   apub::{ApubLikeableType, ApubObjectType},
   fetch_iframely_and_pictrs_data,
-  LemmyContext,
 };
 use actix_web::web::Data;
 use lemmy_db::{
@@ -19,17 +18,18 @@ use lemmy_db::{
   Saveable,
   SortType,
 };
-use lemmy_structs::{
-  blocking,
-  post::*,
-  websocket::{GetPostUsersOnline, JoinPostRoom, SendPost, UserOperation},
-};
+use lemmy_structs::{blocking, post::*};
 use lemmy_utils::{
   apub::{make_apub_endpoint, EndpointType},
   utils::{check_slurs, check_slurs_opt, is_valid_post_title},
   APIError,
   ConnectionId,
   LemmyError,
+};
+use lemmy_websocket::{
+  messages::{GetPostUsersOnline, JoinPostRoom, SendPost},
+  LemmyContext,
+  UserOperation,
 };
 use std::str::FromStr;
 use url::Url;

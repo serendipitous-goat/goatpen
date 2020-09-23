@@ -23,11 +23,10 @@ use lemmy_server::{
   apub::activity_queue::create_activity_queue,
   code_migrations::run_advanced_migrations,
   routes::*,
-  websocket::chat_server::ChatServer,
-  LemmyContext,
 };
 use lemmy_structs::blocking;
 use lemmy_utils::{settings::Settings, LemmyError, CACHE_CONTROL_REGEX};
+use lemmy_websocket::{chat_server::ChatServer, LemmyContext};
 use reqwest::Client;
 use std::sync::Arc;
 use tokio::sync::Mutex;

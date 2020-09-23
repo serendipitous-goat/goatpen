@@ -1,4 +1,3 @@
-use crate::LemmyContext;
 use actix_web::{error::ErrorBadRequest, web::Query, *};
 use anyhow::anyhow;
 use lemmy_db::{community::Community, user::User_};
@@ -9,6 +8,7 @@ use lemmy_utils::{
   WEBFINGER_COMMUNITY_REGEX,
   WEBFINGER_USER_REGEX,
 };
+use lemmy_websocket::LemmyContext;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]

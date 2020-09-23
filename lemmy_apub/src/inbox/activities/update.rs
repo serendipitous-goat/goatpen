@@ -1,16 +1,13 @@
-use crate::{
-  apub::{
-    fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
-    inbox::shared_inbox::{
-      announce_if_community_is_local,
-      get_user_from_activity,
-      receive_unhandled_activity,
-    },
-    ActorType,
-    FromApub,
-    PageExt,
+use crate::apub::{
+  fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
+  inbox::shared_inbox::{
+    announce_if_community_is_local,
+    get_user_from_activity,
+    receive_unhandled_activity,
   },
-  LemmyContext,
+  ActorType,
+  FromApub,
+  PageExt,
 };
 use activitystreams::{activity::Update, base::AnyBase, object::Note, prelude::*};
 use actix_web::HttpResponse;
@@ -22,14 +19,13 @@ use lemmy_db::{
   post_view::PostView,
   Crud,
 };
-use lemmy_structs::{
-  blocking,
-  comment::CommentResponse,
-  post::PostResponse,
-  send_local_notifs,
-  websocket::{SendComment, SendPost, UserOperation},
-};
+use lemmy_structs::{blocking, comment::CommentResponse, post::PostResponse, send_local_notifs};
 use lemmy_utils::{location_info, utils::scrape_text_for_mentions, LemmyError};
+use lemmy_websocket::{
+  messages::{SendComment, SendPost},
+  LemmyContext,
+  UserOperation,
+};
 
 pub async fn receive_update(
   activity: AnyBase,

@@ -1,12 +1,9 @@
-use crate::{
-  apub::{
-    check_is_apub_id_valid,
-    extensions::signatures::verify,
-    fetcher::get_or_fetch_and_upsert_user,
-    insert_activity,
-    ActorType,
-  },
-  LemmyContext,
+use crate::apub::{
+  check_is_apub_id_valid,
+  extensions::signatures::verify,
+  fetcher::get_or_fetch_and_upsert_user,
+  insert_activity,
+  ActorType,
 };
 use activitystreams::{
   activity::{ActorAndObject, Follow, Undo},
@@ -22,6 +19,7 @@ use lemmy_db::{
 };
 use lemmy_structs::blocking;
 use lemmy_utils::{location_info, LemmyError};
+use lemmy_websocket::LemmyContext;
 use log::debug;
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;

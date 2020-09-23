@@ -1,17 +1,14 @@
-use crate::{
-  apub::{
-    fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
-    inbox::shared_inbox::{
-      announce_if_community_is_local,
-      get_user_from_activity,
-      receive_unhandled_activity,
-    },
-    ActorType,
-    FromApub,
-    GroupExt,
-    PageExt,
+use crate::apub::{
+  fetcher::{get_or_fetch_and_insert_comment, get_or_fetch_and_insert_post},
+  inbox::shared_inbox::{
+    announce_if_community_is_local,
+    get_user_from_activity,
+    receive_unhandled_activity,
   },
-  LemmyContext,
+  ActorType,
+  FromApub,
+  GroupExt,
+  PageExt,
 };
 use activitystreams::{
   activity::*,
@@ -37,9 +34,13 @@ use lemmy_structs::{
   comment::CommentResponse,
   community::CommunityResponse,
   post::PostResponse,
-  websocket::{SendComment, SendCommunityRoomMessage, SendPost, UserOperation},
 };
 use lemmy_utils::{location_info, LemmyError};
+use lemmy_websocket::{
+  messages::{SendComment, SendCommunityRoomMessage, SendPost},
+  LemmyContext,
+  UserOperation,
+};
 
 pub async fn receive_undo(
   activity: AnyBase,

@@ -1,7 +1,6 @@
 use crate::{
   api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, is_mod_or_admin, Perform},
   apub::ActorType,
-  LemmyContext,
 };
 use actix_web::web::Data;
 use anyhow::Context;
@@ -22,16 +21,7 @@ use lemmy_db::{
   Joinable,
   SortType,
 };
-use lemmy_structs::{
-  blocking,
-  community::*,
-  websocket::{
-    GetCommunityUsersOnline,
-    JoinCommunityRoom,
-    SendCommunityRoomMessage,
-    UserOperation,
-  },
-};
+use lemmy_structs::{blocking, community::*};
 use lemmy_utils::{
   apub::{generate_actor_keypair, make_apub_endpoint, EndpointType},
   location_info,
@@ -39,6 +29,11 @@ use lemmy_utils::{
   APIError,
   ConnectionId,
   LemmyError,
+};
+use lemmy_websocket::{
+  messages::{GetCommunityUsersOnline, JoinCommunityRoom, SendCommunityRoomMessage},
+  LemmyContext,
+  UserOperation,
 };
 use std::str::FromStr;
 

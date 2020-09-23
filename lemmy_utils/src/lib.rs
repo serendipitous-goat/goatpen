@@ -1,16 +1,5 @@
 #[macro_use]
 extern crate lazy_static;
-extern crate actix_web;
-extern crate anyhow;
-extern crate comrak;
-extern crate lettre;
-extern crate lettre_email;
-extern crate openssl;
-extern crate rand;
-extern crate regex;
-extern crate serde_json;
-extern crate thiserror;
-extern crate url;
 
 pub mod apub;
 pub mod email;

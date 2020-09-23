@@ -8,7 +8,6 @@ use crate::{
     Perform,
   },
   apub::{ApubLikeableType, ApubObjectType},
-  LemmyContext,
 };
 use actix_web::web::Data;
 use lemmy_db::{
@@ -24,12 +23,7 @@ use lemmy_db::{
   Saveable,
   SortType,
 };
-use lemmy_structs::{
-  blocking,
-  comment::*,
-  send_local_notifs,
-  websocket::{SendComment, UserOperation},
-};
+use lemmy_structs::{blocking, comment::*, send_local_notifs};
 use lemmy_utils::{
   apub::{make_apub_endpoint, EndpointType},
   utils::{remove_slurs, scrape_text_for_mentions},
@@ -37,6 +31,7 @@ use lemmy_utils::{
   ConnectionId,
   LemmyError,
 };
+use lemmy_websocket::{messages::SendComment, LemmyContext, UserOperation};
 use std::str::FromStr;
 
 #[async_trait::async_trait(?Send)]

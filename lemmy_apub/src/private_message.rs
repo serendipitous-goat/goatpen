@@ -13,7 +13,6 @@ use crate::{
     ToApub,
   },
   DbPool,
-  LemmyContext,
 };
 use activitystreams::{
   activity::{
@@ -34,6 +33,7 @@ use lemmy_db::{
 };
 use lemmy_structs::blocking;
 use lemmy_utils::{location_info, utils::convert_datetime, LemmyError};
+use lemmy_websocket::LemmyContext;
 use url::Url;
 
 #[async_trait::async_trait(?Send)]

@@ -1,15 +1,12 @@
-use crate::{
-  apub::{
-    inbox::shared_inbox::{
-      announce_if_community_is_local,
-      get_user_from_activity,
-      receive_unhandled_activity,
-    },
-    ActorType,
-    FromApub,
-    PageExt,
+use crate::apub::{
+  inbox::shared_inbox::{
+    announce_if_community_is_local,
+    get_user_from_activity,
+    receive_unhandled_activity,
   },
-  LemmyContext,
+  ActorType,
+  FromApub,
+  PageExt,
 };
 use activitystreams::{activity::Create, base::AnyBase, object::Note, prelude::*};
 use actix_web::HttpResponse;
@@ -20,14 +17,13 @@ use lemmy_db::{
   post::{Post, PostForm},
   post_view::PostView,
 };
-use lemmy_structs::{
-  blocking,
-  comment::CommentResponse,
-  post::PostResponse,
-  send_local_notifs,
-  websocket::{SendComment, SendPost, UserOperation},
-};
+use lemmy_structs::{blocking, comment::CommentResponse, post::PostResponse, send_local_notifs};
 use lemmy_utils::{location_info, utils::scrape_text_for_mentions, LemmyError};
+use lemmy_websocket::{
+  messages::{SendComment, SendPost},
+  LemmyContext,
+  UserOperation,
+};
 
 pub async fn receive_create(
   activity: AnyBase,
