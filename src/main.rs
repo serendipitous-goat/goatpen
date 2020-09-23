@@ -16,14 +16,11 @@ use diesel::{
   PgConnection,
 };
 use lazy_static::lazy_static;
+use lemmy_api::match_websocket_operation;
 use lemmy_apub::activity_queue::create_activity_queue;
 use lemmy_db::get_database_url_from_env;
 use lemmy_rate_limit::{rate_limiter::RateLimiter, RateLimit};
-use lemmy_server::{
-  api::match_websocket_operation,
-  code_migrations::run_advanced_migrations,
-  routes::*,
-};
+use lemmy_server::{code_migrations::run_advanced_migrations, routes::*};
 use lemmy_structs::blocking;
 use lemmy_utils::{settings::Settings, LemmyError, CACHE_CONTROL_REGEX};
 use lemmy_websocket::{chat_server::ChatServer, LemmyContext};

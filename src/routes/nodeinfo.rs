@@ -1,6 +1,6 @@
-use crate::version;
 use actix_web::{body::Body, error::ErrorBadRequest, *};
 use anyhow::anyhow;
+use lemmy_api::version;
 use lemmy_db::site_view::SiteView;
 use lemmy_structs::blocking;
 use lemmy_utils::{apub::get_apub_protocol_string, settings::Settings, LemmyError};

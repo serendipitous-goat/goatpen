@@ -1,6 +1,10 @@
 use crate::{
-  api::{check_community_ban, get_user_from_jwt, get_user_from_jwt_opt, is_mod_or_admin, Perform},
+  check_community_ban,
   fetch_iframely_and_pictrs_data,
+  get_user_from_jwt,
+  get_user_from_jwt_opt,
+  is_mod_or_admin,
+  Perform,
 };
 use actix_web::web::Data;
 use lemmy_apub::{ApubLikeableType, ApubObjectType};

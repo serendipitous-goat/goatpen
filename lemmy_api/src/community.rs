@@ -1,4 +1,4 @@
-use crate::api::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, is_mod_or_admin, Perform};
+use crate::{get_user_from_jwt, get_user_from_jwt_opt, is_admin, is_mod_or_admin, Perform};
 use actix_web::web::Data;
 use anyhow::Context;
 use lemmy_apub::ActorType;
