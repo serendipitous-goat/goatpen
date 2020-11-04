@@ -559,6 +559,56 @@ Sent to: User
 |---|---|---|
 | `object` | yes | Any `Create`, `Update`, `Like`, `Dislike`, `Delete` `Remove` or `Undo` activity as described above |
 
+### Remove or Delete Community
+
+```json
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "http://ds9.lemmy.ml/activities/remove/e4ca7688-af9d-48b7-864f-765e7f9f3591",
+  "type": "Remove",
+  "actor": "http://ds9.lemmy.ml/u/picard",
+  "cc": [
+    "http://ds9.lemmy.ml/c/some_community/followers"
+  ],
+  "to": "https://www.w3.org/ns/activitystreams#Public",
+  "object": "http://ds9.lemmy.ml/c/some_community"
+}
+```
+
+| Field Name | Mandatory | Description |
+|---|---|---|
+| `type` | yes | Either `Remove` or `Delete` |
+
+### Restore Removed or Deleted Community 
+
+```json
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "http://ds9.lemmy.ml/activities/like/0703668c-8b09-4a85-aa7a-f93621936901",
+  "type": "Undo",
+  "actor": "http://ds9.lemmy.ml/u/lemmy_alpha",
+  "to": "https://www.w3.org/ns/activitystreams#Public",
+  "cc": [
+    "http://ds9.lemmy.ml/c/testcom/followers"
+  ],
+  "object": {
+    "@context": "https://www.w3.org/ns/activitystreams",
+    "id": "http://ds9.lemmy.ml/activities/remove/1062b5e0-07e8-44fc-868c-854209935bdd",
+    "type": "Remove",
+    "to": "https://www.w3.org/ns/activitystreams#Public",
+    "cc": [
+      "http://ds9.lemmy.ml/c/testcom/followers"
+    ],
+    "object": "http://ds9.lemmy.ml/c/testcom",
+    "actor": "http://ds9.lemmy.ml/u/lemmy_alpha"
+  }
+}
+
+```
+| Field Name | Mandatory | Description |
+|---|---|---|
+| `object.type` | yes | Either `Remove` or `Delete` |
+
 ### Create or Update Private message 
 
 Creates a new private message between two users.

@@ -4,7 +4,6 @@ use crate::{
   check_is_apub_id_valid,
   fetcher::get_or_fetch_and_upsert_user,
   ActorType,
-  ToApub,
 };
 use activitystreams::{
   activity::{
@@ -86,9 +85,7 @@ impl ActorType for Community {
 
   /// If the creator of a community deletes the community, send this to all followers.
   async fn send_delete(&self, creator: &User_, context: &LemmyContext) -> Result<(), LemmyError> {
-    let group = self.to_apub(context.pool()).await?;
-
-    let mut delete = Delete::new(creator.actor_id.to_owned(), group.into_any_base()?);
+    let mut delete = Delete::new(creator.actor_id.to_owned(), self.actor_id()?);
     delete
       .set_context(activitystreams::context())
       .set_id(generate_activity_id(DeleteType::Delete)?)
@@ -105,9 +102,7 @@ impl ActorType for Community {
     creator: &User_,
     context: &LemmyContext,
   ) -> Result<(), LemmyError> {
-    let group = self.to_apub(context.pool()).await?;
-
-    let mut delete = Delete::new(creator.actor_id.to_owned(), group.into_any_base()?);
+    let mut delete = Delete::new(creator.actor_id.to_owned(), self.actor_id()?);
     delete
       .set_context(activitystreams::context())
       .set_id(generate_activity_id(DeleteType::Delete)?)
