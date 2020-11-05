@@ -2,7 +2,6 @@ table! {
     activity (id) {
         id -> Int4,
         ap_id -> Text,
-        user_id -> Int4,
         data -> Jsonb,
         local -> Bool,
         published -> Timestamp,
@@ -481,7 +480,6 @@ table! {
     }
 }
 
-joinable!(activity -> user_ (user_id));
 joinable!(comment -> post (post_id));
 joinable!(comment -> user_ (creator_id));
 joinable!(comment_like -> comment (comment_id));

@@ -219,7 +219,7 @@ where
   // might send the same ap_id
   if insert_into_db {
     let id = activity.id().context(location_info!())?;
-    insert_activity(id, actor.user_id(), activity.clone(), true, pool).await?;
+    insert_activity(id, activity.clone(), true, pool).await?;
   }
 
   for i in inboxes {
