@@ -15,6 +15,7 @@ pub struct Activity {
   pub ap_id: String,
   pub data: Value,
   pub local: bool,
+  pub sensitive: bool,
   pub published: chrono::NaiveDateTime,
   pub updated: Option<chrono::NaiveDateTime>,
 }
@@ -25,6 +26,7 @@ pub struct ActivityForm {
   pub ap_id: String,
   pub data: Value,
   pub local: bool,
+  pub sensitive: bool,
   pub updated: Option<chrono::NaiveDateTime>,
 }
 
@@ -59,6 +61,7 @@ impl Activity {
     ap_id: String,
     data: &T,
     local: bool,
+    sensitive: bool,
   ) -> Result<Self, IoError>
   where
     T: Serialize + Debug,
@@ -68,6 +71,7 @@ impl Activity {
       ap_id,
       data: serde_json::to_value(&data)?,
       local,
+      sensitive,
       updated: None,
     };
     let result = Activity::create(&conn, &activity_form);
@@ -149,9 +153,9 @@ mod tests {
     .unwrap();
     let activity_form = ActivityForm {
       ap_id: ap_id.to_string(),
-      user_id: inserted_creator.id,
       data: test_json.to_owned(),
       local: true,
+      sensitive: false,
       updated: None,
     };
 
@@ -160,9 +164,9 @@ mod tests {
     let expected_activity = Activity {
       ap_id: ap_id.to_string(),
       id: inserted_activity.id,
-      user_id: inserted_creator.id,
       data: test_json,
       local: true,
+      sensitive: false,
       published: inserted_activity.published,
       updated: None,
     };

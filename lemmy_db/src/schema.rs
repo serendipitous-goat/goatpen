@@ -4,6 +4,7 @@ table! {
         ap_id -> Text,
         data -> Jsonb,
         local -> Bool,
+        sensitive -> Bool,
         published -> Timestamp,
         updated -> Nullable<Timestamp>,
     }

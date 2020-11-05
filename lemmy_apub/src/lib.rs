@@ -255,6 +255,7 @@ pub async fn insert_activity<T>(
   ap_id: &Url,
   activity: T,
   local: bool,
+  sensitive: bool,
   pool: &DbPool,
 ) -> Result<(), LemmyError>
 where
@@ -262,7 +263,7 @@ where
 {
   let ap_id = ap_id.to_string();
   blocking(pool, move |conn| {
-    Activity::insert(conn, ap_id, &activity, local)
+    Activity::insert(conn, ap_id, &activity, local, sensitive)
   })
   .await??;
   Ok(())

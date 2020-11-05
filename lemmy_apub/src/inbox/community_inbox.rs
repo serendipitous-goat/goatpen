@@ -93,7 +93,7 @@ pub async fn community_inbox(
     ValidTypes::Undo => handle_undo_follow(any_base, user, community, &context).await,
   };
 
-  insert_activity(&activity_id, activity.clone(), false, context.pool()).await?;
+  insert_activity(&activity_id, activity.clone(), false, true, context.pool()).await?;
   res
 }
 
