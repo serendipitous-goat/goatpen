@@ -136,6 +136,22 @@ pub async fn search_by_apub_id(
     Url::parse(&query)?
   };
 
+  let recursion_counter = &mut 0;
+  let search_result =
+    fetch_remote_object::<SearchAcceptedObjects>(context.client(), &query_url, recursion_counter)
+      .await?;
+  let response = match_search_result(context, search_result, query_url, recursion_counter).await?;
+
+  Ok(response)
+}
+
+async fn match_search_result(
+  context: &LemmyContext,
+  search_result: SearchAcceptedObjects,
+  query_url: Url,
+  recursion_counter: &mut i32,
+) -> Result<SearchResponse, LemmyError> {
+  let domain = query_url.domain().context("url has no domain")?;
   let mut response = SearchResponse {
     type_: SearchType::All.to_string(),
     comments: vec![],
@@ -144,15 +160,7 @@ pub async fn search_by_apub_id(
     users: vec![],
   };
 
-  let domain = query_url.domain().context("url has no domain")?;
-  let recursion_counter = &mut 0;
-  let response = match fetch_remote_object::<SearchAcceptedObjects>(
-    context.client(),
-    &query_url,
-    recursion_counter,
-  )
-  .await?
-  {
+  match search_result {
     SearchAcceptedObjects::Person(p) => {
       let user_uri = p.inner.id(domain)?.context("person has no id")?;
 
@@ -164,8 +172,6 @@ pub async fn search_by_apub_id(
         })
         .await??,
       ];
-
-      response
     }
     SearchAcceptedObjects::Group(g) => {
       let community_uri = g.inner.id(domain)?.context("group has no id")?;
@@ -179,8 +185,6 @@ pub async fn search_by_apub_id(
         })
         .await??,
       ];
-
-      response
     }
     SearchAcceptedObjects::Page(p) => {
       let post_form = PostForm::from_apub(&p, context, Some(query_url), recursion_counter).await?;
@@ -188,8 +192,6 @@ pub async fn search_by_apub_id(
       let p = blocking(context.pool(), move |conn| Post::upsert(conn, &post_form)).await??;
       response.posts =
         vec![blocking(context.pool(), move |conn| PostView::read(conn, p.id, None)).await??];
-
-      response
     }
     SearchAcceptedObjects::Comment(c) => {
       let comment_form =
@@ -205,8 +207,6 @@ pub async fn search_by_apub_id(
         })
         .await??,
       ];
-
-      response
     }
   };
 
@@ -391,7 +391,17 @@ async fn fetch_remote_community(
     .await??;
   }
 
-  // fetch outbox (maybe make this conditional)
+  // maybe make this conditional
+  fetch_community_outbox(context, &community, recursion_counter).await?;
+
+  Ok(community)
+}
+
+async fn fetch_community_outbox(
+  context: &LemmyContext,
+  community: &Community,
+  recursion_counter: &mut i32,
+) -> Result<(), LemmyError> {
   let outbox = fetch_remote_object::<OrderedCollection>(
     context.client(),
     &community.get_outbox_url()?,
@@ -425,7 +435,7 @@ async fn fetch_remote_community(
     // TODO: we need to send a websocket update here
   }
 
-  Ok(community)
+  Ok(())
 }
 
 /// Gets a post by its apub ID. If it exists locally, it is returned directly. Otherwise it is
