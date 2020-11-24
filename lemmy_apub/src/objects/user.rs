@@ -1,4 +1,10 @@
-use crate::{objects::check_object_domain, ActorType, FromApub, PersonExt, ToApub};
+use crate::{
+  objects::{check_is_markdown, check_object_domain, mime_markdown},
+  ActorType,
+  FromApub,
+  PersonExt,
+  ToApub,
+};
 use activitystreams::{
   actor::{ApActor, Endpoints, Person},
   object::{Image, Tombstone},
@@ -47,7 +53,12 @@ impl ToApub for User_ {
     }
 
     if let Some(bio) = &self.bio {
-      person.set_summary(bio.to_owned());
+      // Use `content` here because it supports markdown, while summary does not.
+      person
+        .set_content(bio.to_owned())
+        .set_media_type(mime_markdown()?)
+        // Also set summary for compatibility with older Lemmy versions. Remove this after a while.
+        .set_summary(bio.to_owned());
     }
 
     if let Some(i) = self.preferred_username.to_owned() {
@@ -121,10 +132,14 @@ impl FromApub for UserForm {
     // here when we federate to other platforms. Same for preferred_username
     let bio = person
       .inner
-      .summary()
+      .content()
       .map(|s| s.as_single_xsd_string())
       .flatten()
       .map(|s| s.to_string());
+    if bio.is_some() {
+      check_is_markdown(person.media_type())?;
+    }
+
     check_slurs(&name)?;
     check_slurs_opt(&preferred_username)?;
     check_slurs_opt(&bio)?;

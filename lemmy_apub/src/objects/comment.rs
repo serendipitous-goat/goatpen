@@ -4,7 +4,7 @@ use crate::{
     get_or_fetch_and_insert_post,
     get_or_fetch_and_upsert_user,
   },
-  objects::{check_object_domain, create_tombstone},
+  objects::{check_is_markdown, check_object_domain, create_tombstone, mime_markdown},
   FromApub,
   ToApub,
 };
@@ -64,6 +64,7 @@ impl ToApub for Comment {
       .set_to(community.actor_id)
       .set_many_in_reply_tos(in_reply_to_vec)
       .set_content(self.content.to_owned())
+      .set_media_type(mime_markdown()?)
       .set_attributed_to(creator.actor_id);
 
     if let Some(u) = self.updated {
@@ -124,6 +125,9 @@ impl FromApub for CommentForm {
       }
       None => None,
     };
+
+    check_is_markdown(note.media_type())?;
+
     let content = note
       .content()
       .context(location_info!())?

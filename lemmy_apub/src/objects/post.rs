@@ -1,7 +1,7 @@
 use crate::{
   extensions::page_extension::PageExtension,
   fetcher::{get_or_fetch_and_upsert_community, get_or_fetch_and_upsert_user},
-  objects::{check_object_domain, create_tombstone},
+  objects::{check_is_markdown, check_object_domain, create_tombstone, mime_markdown},
   FromApub,
   PageExt,
   ToApub,
@@ -57,7 +57,9 @@ impl ToApub for Post {
       .set_attributed_to(creator.actor_id);
 
     if let Some(body) = &self.body {
-      page.set_content(body.to_owned());
+      page
+        .set_content(body.to_owned())
+        .set_media_type(mime_markdown()?);
     }
 
     // TODO: hacky code because we get self.url == Some("")
@@ -162,6 +164,7 @@ impl FromApub for PostForm {
       .as_single_xsd_string()
       .context(location_info!())?
       .to_string();
+
     let body = page
       .inner
       .content()
@@ -169,6 +172,10 @@ impl FromApub for PostForm {
       .map(|c| c.as_single_xsd_string())
       .flatten()
       .map(|s| s.to_string());
+    if body.is_some() {
+      check_is_markdown(page.media_type())?;
+    }
+
     check_slurs(&name)?;
     let body_slurs_removed = body.map(|b| remove_slurs(&b));
     Ok(PostForm {

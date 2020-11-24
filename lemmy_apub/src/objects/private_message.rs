@@ -1,7 +1,7 @@
 use crate::{
   check_is_apub_id_valid,
   fetcher::get_or_fetch_and_upsert_user,
-  objects::{check_object_domain, create_tombstone},
+  objects::{check_is_markdown, check_object_domain, create_tombstone, mime_markdown},
   FromApub,
   ToApub,
 };
@@ -39,6 +39,7 @@ impl ToApub for PrivateMessage {
       .set_id(Url::parse(&self.ap_id.to_owned())?)
       .set_published(convert_datetime(self.published))
       .set_content(self.content.to_owned())
+      .set_media_type(mime_markdown()?)
       .set_to(recipient.actor_id)
       .set_attributed_to(creator.actor_id);
 
@@ -82,6 +83,8 @@ impl FromApub for PrivateMessageForm {
       get_or_fetch_and_upsert_user(&recipient_actor_id, context, request_counter).await?;
     let ap_id = note.id_unchecked().context(location_info!())?.to_string();
     check_is_apub_id_valid(&Url::parse(&ap_id)?)?;
+
+    check_is_markdown(note.media_type())?;
 
     Ok(PrivateMessageForm {
       creator_id: creator.id,

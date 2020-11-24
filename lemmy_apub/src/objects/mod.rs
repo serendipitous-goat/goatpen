@@ -2,6 +2,7 @@ use crate::check_is_apub_id_valid;
 use activitystreams::{
   base::{AsBase, BaseExt},
   markers::Base,
+  mime::{FromStrError, Mime},
   object::{Tombstone, TombstoneExt},
 };
 use anyhow::{anyhow, Context};
@@ -57,4 +58,19 @@ where
     actor_id
   };
   Ok(actor_id.to_string())
+}
+
+pub(in crate::objects) fn mime_markdown() -> Result<Mime, FromStrError> {
+  "text/markdown".parse()
+}
+
+pub(in crate::objects) fn check_is_markdown(mime: Option<&Mime>) -> Result<(), LemmyError> {
+  let mime = mime.context(location_info!())?;
+  if !mime.eq(&mime_markdown()?) {
+    Err(LemmyError::from(anyhow!(
+      "Lemmy only supports markdown content"
+    )))
+  } else {
+    Ok(())
+  }
 }

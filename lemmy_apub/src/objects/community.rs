@@ -1,7 +1,7 @@
 use crate::{
   extensions::group_extensions::GroupExtension,
   fetcher::get_or_fetch_and_upsert_user,
-  objects::{check_object_domain, create_tombstone},
+  objects::{check_is_markdown, check_object_domain, create_tombstone, mime_markdown},
   ActorType,
   FromApub,
   GroupExt,
@@ -58,9 +58,7 @@ impl ToApub for Community {
       group.set_updated(convert_datetime(u));
     }
     if let Some(d) = self.description.to_owned() {
-      // TODO: this should be html, also add source field with raw markdown
-      //       -> same for post.content and others
-      group.set_content(d);
+      group.set_content(d).set_media_type(mime_markdown()?);
     }
 
     if let Some(icon_url) = &self.icon {
@@ -146,6 +144,10 @@ impl FromApub for CommunityForm {
       .map(|s| s.as_single_xsd_string())
       .flatten()
       .map(|s| s.to_string());
+    if description.is_some() {
+      check_is_markdown(group.media_type())?;
+    }
+
     check_slurs(&name)?;
     check_slurs(&title)?;
     check_slurs_opt(&description)?;
