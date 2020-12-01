@@ -159,7 +159,7 @@ where
   let id = activity.id_unchecked().context(location_info!())?;
   let activity_domain = id.domain().context(location_info!())?;
 
-  if activity_domain != Settings::get().hostname {
+  if activity_domain == Settings::get().hostname {
     return Err(
       anyhow!(
         "Error: received activity which was sent by local instance: {:?}",
