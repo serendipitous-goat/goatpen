@@ -17,7 +17,7 @@ Front Page|Post
 ---|---
 ![main screen](https://raw.githubusercontent.com/LemmyNet/lemmy/main/docs/img/main_screen.png)|![chat screen](https://raw.githubusercontent.com/LemmyNet/lemmy/main/docs/img/chat_screen.png)
 
-GoatPen is forked from [Lemmy](https://github.com/LemmyNet/lemmy), a site similar to [Reddit](https://reddit.com), [Lobste.rs](https://lobste.rs), or [Hacker News](https://news.ycombinator.com/): you subscribe to forums you're interested in, post links and discussions, then vote, and comment on them. GoatPen intends to keep compatibility with Lemmy's federation interfaces as they develop, if practical.
+GoatPen is forked from [Lemmy](https://github.com/LemmyNet/lemmy), a site similar to [Reddit](https://reddit.com), [Lobste.rs](https://lobste.rs), or [Hacker News](https://news.ycombinator.com/): you subscribe to forums you're interested in, post links and discussions, then vote, and comment on them. GoatPen intends to keep compatibility with Lemmy's federation interfaces as they develop, if practical (even though we're apparently banned ;-) ).
 
 Each GoatPen server can set its own moderation policy; appointing site-wide admins, and community moderators. The key differentiator from Lemmy is that the developers will respect your God given right to free speech, follow your own conscience and freely choose to associate or not with whom you please.
 
